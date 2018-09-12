@@ -1,0 +1,38 @@
+import tp.*
+describe "el espectro malefico se llama asi, y rolando tiene que tener los tres artefactos
+		(espada,collar y mascara) y el collar tiene que tener 5 perlas"{
+fixture {
+	espectroMalefico.nombre("espectro malefico")
+	rolando.agregarArtefactos([espadaDelDestino,collarDivino,mascaraOscura])
+	collarDivino.perlas(5)
+}
+test "Eliminar todos los artefactos de Rolando.
+Conocer la habilidad para la lucha de Rolando." {
+	rolando.removerTodosLosArtefactos()
+	assert.equals(1,rolando.valorLucha())
+}
+test "Conocer la habilidad para la lucha de Rolando con todos los artefactos."{
+	assert.equals(13,rolando.valorLucha())
+}
+test "Cambiar la cantidad de perlas del collar divino a 3.
+Conocer la habilidad para la lucha de Rolando con todos los artefactos."{
+	collarDivino.perlas(3)
+	assert.equals(11,rolando.valorLucha())
+}
+test "Cambiar el valor base para la lucha de Rolando a 8.
+Conocer la habilidad para la lucha de Rolando con todos los artefactos."{
+	rolando.valorBaseLucha(8)
+	assert.equals(20,rolando.valorLucha())
+}
+test "Hacer que ocurra un eclipse.
+Preguntar por el valor de lucha de la máscara oscura."{
+	fuerzaOscura.eclipse()
+	assert.equals(5,mascaraOscura.valor())
+}
+test "Eliminar la máscara oscura de los artefactos de Rolando.
+Conocer la habilidad para la lucha de Rolando."{
+	rolando.removerArtefacto(mascaraOscura)
+	assert.equals(9,rolando.valorLucha())
+}
+test ""
+}
