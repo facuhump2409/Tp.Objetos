@@ -34,5 +34,4 @@ Conocer la habilidad para la lucha de Rolando."{
 	rolando.removerArtefacto(mascaraOscura)
 	assert.equals(9,rolando.valorLucha())
 }
-test ""
 }
