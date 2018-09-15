@@ -1,0 +1,47 @@
+import tp.*
+describe "espectro malefico con ese nombre, artefactos: espada, collar(5 perlas), mascara, armadura sin refuerzo, espejo"{
+	
+fixture {
+	espectroMalefico.nombre("espectro malefico")
+	rolando.agregarArtefactos([espadaDelDestino,collarDivino,mascaraOscura,armadura,espejo])
+	collarDivino.perlas(5)
+}
+
+test "rolando esta cargado"{
+	assert.that(rolando.estaCargado())
+}
+test "si rolando se saca la armadura deja de estar cargado"{
+	rolando.removerArtefacto(armadura)
+	assert.notThat(rolando.estaCargado())
+}
+test "conocer habilidad de lucha de rolando con todos los artefactos"{
+	assert.equals(20,rolando.valorLucha())
+}
+test "conocer habilidad de lucha de la armadura de rolando si tiene una bendicion de refuerzo"{
+	armadura.refuerzo(bendicion)
+	assert.equals(58,armadura.valor())
+}
+test "conocer habilidad de lucha de la armadura de rolando si tiene una cota de malla de refuerzo"{
+	armadura.refuerzo(cotaDeMalla)
+	assert.equals(3,armadura.valor())
+}
+test "conocer habilidad de lucha de la armadura de rolando si tiene un hechizo basico de refuerzo"{
+	armadura.refuerzo(hechizoBasico)
+	assert.equals(12,armadura.valor())
+}
+test "conocer habilidad de lucha de la armadura de rolando si tiene un espectro malefico de refuerzo"{
+	armadura.refuerzo(espectroMalefico)
+	assert.equals(19,armadura.valor())
+}
+test "conocer la habilidad de lucha de rolando si solo tiene el espejo"{
+	rolando.removerTodosLosArtefactos()
+	rolando.agregarArtefactos([espejo])
+	assert.equals(1,rolando.valorLucha())
+}
+test "conocer nivel de hechiceria de rolando si reemplazo su hechizo preferido por un libro de hechizos con un espectro malefico y un hechizo basico"{
+	libroHechizos.hechizos([espectroMalefico,hechizoBasico])
+	rolando.hechizoPreferido(libroHechizos)
+	assert.equals(56,rolando.nivelHechiceria())
+}
+
+}
