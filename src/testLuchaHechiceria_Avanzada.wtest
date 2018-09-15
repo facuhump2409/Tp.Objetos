@@ -19,19 +19,19 @@ test "conocer habilidad de lucha de rolando con todos los artefactos"{
 }
 test "conocer habilidad de lucha de la armadura de rolando si tiene una bendicion de refuerzo"{
 	armadura.refuerzo(bendicion)
-	assert.equals(58,armadura.valor())
+	assert.equals(58,armadura.valor(rolando))
 }
 test "conocer habilidad de lucha de la armadura de rolando si tiene una cota de malla de refuerzo"{
 	armadura.refuerzo(cotaDeMalla)
-	assert.equals(3,armadura.valor())
+	assert.equals(3,armadura.valor(rolando))
 }
 test "conocer habilidad de lucha de la armadura de rolando si tiene un hechizo basico de refuerzo"{
 	armadura.refuerzo(hechizoBasico)
-	assert.equals(12,armadura.valor())
+	assert.equals(12,armadura.valor(rolando))
 }
 test "conocer habilidad de lucha de la armadura de rolando si tiene un espectro malefico de refuerzo"{
 	armadura.refuerzo(espectroMalefico)
-	assert.equals(19,armadura.valor())
+	assert.equals(19,armadura.valor(rolando))
 }
 test "conocer la habilidad de lucha de rolando si solo tiene el espejo"{
 	rolando.removerTodosLosArtefactos()

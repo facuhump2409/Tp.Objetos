@@ -6,40 +6,48 @@ object fuerzaOscura {
 
 /////////////
 object nada{
-	method poder(){ return 0 }
+	method poder(guerrero){ return 0 }
 	
-	method valor(){ return 0 }
+	method valor(guerrero){ return 0 }
 }
 /////////////
 
 object espectroMalefico {
 	var nombre = ""
 	
-	method poder () { return nombre.size() }
+	method poder (guerrero) { return nombre.size() }
 	
 	method nombre(nuevoNombre){ nombre= nuevoNombre }
 	
-	method esPoderoso(){ return self.poder() > 15 }
+	method esPoderoso(guerrero){ return self.poder(guerrero) > 15 }
 }
 
 object hechizoBasico {
-	method poder () { return 10 }
+	method poder (guerrero) { return 10 }
 	
-	method esPoderoso(){ return self.poder() > 15 }
+	method esPoderoso(guerrero){ return self.poder(guerrero) > 15 }
 }
 
 /////////////
 object libroHechizos{
 	var hechizos = []
 	
-	method hechizos(nuevosHechizos){ hechizos = nuevosHechizos } //@trate de evitar q se pueda poner el libro de hechizos pero solo logre romper todo
+	method filtrarLibros(nuevosHechizos){
+		if (nuevosHechizos.contains(self)){ 
+			nuevosHechizos.remove(self)
+			return self.filtrarLibros(nuevosHechizos)
+			}
+		else return nuevosHechizos
+	}
 	
-	method poder(){ return hechizos.sum({hechizo=>if (hechizo.esPoderoso()) hechizo.poder() else 0}) }
+	method hechizos(nuevosHechizos){ hechizos.addAll(self.filtrarLibros(nuevosHechizos))} 
+	
+	method poder(guerrero){ return hechizos.sum({hechizo=>if (hechizo.esPoderoso(guerrero)) hechizo.poder(guerrero) else 0}) }
 }
 /////////////
 
 object espadaDelDestino{
-	method valor(){ return 3 }
+	method valor(guerrero){ return 3 }
 	
 	method esEspejo(){ return false} //@ Un asquete
 }
@@ -49,13 +57,13 @@ object collarDivino{
 	
 	method perlas (cantidadDePerlas){ perlas = cantidadDePerlas }
 	
-	method valor(){ return perlas }
+	method valor(guerrero){ return perlas }
 	
 	method esEspejo(){ return false} //@ Un asquete
 }
 
 object mascaraOscura{
-	method valor(){ return 4.max(fuerzaOscura.valor()/2) }
+	method valor(guerrero){ return 4.max(fuerzaOscura.valor()/2) }
 	
 	method esEspejo(){ return false} //@ Un asquete
 }
@@ -63,15 +71,15 @@ object mascaraOscura{
 /////////////
 
 object cotaDeMalla{
-	method poder(){ return 1 }
+	method poder(guerrero){ return 1 }
 }
 
 object bendicion{
-	method poder(){ return rolando.nivelHechiceria() } 
+	method poder(guerrero){ return guerrero.nivelHechiceria() } 
 }//@debe haber forma de que te diga quien usa la armadura sin poner rolando
 
 object hechizo{
-	method poder(){ return rolando.hechizoPreferido().poder() }
+	method poder(guerrero){ return guerrero.hechizoPreferido().poder() }
 }//@lo mismo de bendicion
 
 object armadura{
@@ -81,13 +89,13 @@ object armadura{
 		
 	method refuerzo(nuevoRef){ refuerzo = nuevoRef }
 	
-	method valor(){ return valorBase + refuerzo.poder() }
+	method valor(guerrero){ return valorBase + refuerzo.poder(guerrero) }
 	
-	method esEspejo(){ return false} //@ Un asquete
+	method esEspejo(){ return false } //@ Un asquete
 }
 
 object espejo{
-	method valor(){ return rolando.mejorArtefacto().valor() }
+	method valor(guerrero){ return guerrero.valorMejorArtefacto() }
 	
 	method esEspejo(){ return true } //@ Un asquete
 }
@@ -113,22 +121,22 @@ object rolando {
 	
 	method agregarArtefactos(nuevosArtefactos){artefactos.addAll(nuevosArtefactos) }
 	
-	method nivelHechiceria() { return (valorBaseHechizo*hechizoPreferido.poder()) +fuerzaOscura.valor() }
+	method nivelHechiceria() { return (valorBaseHechizo*hechizoPreferido.poder(self)) +fuerzaOscura.valor() }
 	
-	method valorLucha(){ return artefactos.sum({artefacto => artefacto.valor()})+valorBaseLucha }
+	method valorLucha(){ return artefactos.sum({artefacto => artefacto.valor(self)})+valorBaseLucha }
 	
-	method esPoderoso(){ return hechizoPreferido.esPoderoso() }
+	method esPoderoso(){ return hechizoPreferido.esPoderoso(self) }
 	
 	///////////
 	method estaCargado(){ return artefactos.size()>=5 }
 	
-	method mejorArt(){ 
-		return artefactos.max({artefacto=>if (!artefacto.esEspejo()) artefacto.valor() else 0})
+	method valorMejorArtefacto(){ 
+		return artefactos.map({artefacto=>if (!artefacto.esEspejo()) artefacto.valor(self) else 0}).max()
 	}
-	method mejorArtefacto(){
-		if ( !self.mejorArt().esEspejo() ) return self.mejorArt()
-		else return nada
-	}
+	//method mejorArtefacto(){
+	//	if ( !self.mejorArt().esEspejo() ) return self.mejorArt()
+	//	else return nada
+	//}
 //if (artefacto.equals(espejo)) return artefacto else return nada. se puede hacer esto?? y sacar los .esEspejo()	
 	///////////
 }

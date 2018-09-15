@@ -27,7 +27,7 @@ Conocer la habilidad para la lucha de Rolando con todos los artefactos."{
 test "Hacer que ocurra un eclipse.
 Preguntar por el valor de lucha de la máscara oscura."{
 	fuerzaOscura.eclipse()
-	assert.equals(5,mascaraOscura.valor())
+	assert.equals(5,mascaraOscura.valor(rolando))
 }
 test "Eliminar la máscara oscura de los artefactos de Rolando.
 Conocer la habilidad para la lucha de Rolando."{
