@@ -25,7 +25,7 @@ object espectroMalefico {
 object hechizoBasico {
 	method poder (guerrero) { return 10 }
 	
-	method esPoderoso(guerrero){ return self.poder(guerrero) > 15 }
+	method esPoderoso(guerrero){ return false }
 }
 
 /////////////
@@ -42,7 +42,7 @@ object libroHechizos{
 	
 	method hechizos(nuevosHechizos){ hechizos.addAll(self.filtrarLibros(nuevosHechizos))} 
 	
-	method poder(guerrero){ return hechizos.sum({hechizo=>if (hechizo.esPoderoso(guerrero)) hechizo.poder(guerrero) else 0}) }
+	method poder(guerrero){ return hechizos.filter({hechizo=>hechizo.esPoderoso(guerrero)}).sum({hechizo=>hechizo.poder(guerrero)}) }
 }
 /////////////
 
@@ -79,7 +79,7 @@ object bendicion{
 }//@debe haber forma de que te diga quien usa la armadura sin poner rolando
 
 object hechizo{
-	method poder(guerrero){ return guerrero.hechizoPreferido().poder() }
+	method poder(guerrero){ return guerrero.poderHechizoPreferido() }
 }//@lo mismo de bendicion
 
 object armadura{
@@ -110,7 +110,8 @@ object rolando {
 	var valorBaseLucha = 1
 	
 	var artefactos = []
-
+	method artefactos(){return artefactos}
+	
 	method luchaMayorAHechizo(){ return self.valorLucha()>self.nivelHechiceria() }
 	
 	method valorBaseLucha(nuevoValor){ valorBaseLucha= nuevoValor }
@@ -130,8 +131,17 @@ object rolando {
 	///////////
 	method estaCargado(){ return artefactos.size()>=5 }
 	
+	method soloTieneEspejo(){
+		return artefactos.size()==1 && artefactos.contains(espejo) //@contains no es de orden superior, esto es medio sucio
+	}
+	
 	method valorMejorArtefacto(){ 
-		return artefactos.map({artefacto=>if (!artefacto.esEspejo()) artefacto.valor(self) else 0}).max()
+		if (self.soloTieneEspejo()) return 0
+		else return artefactos.filter({artefacto=>!artefacto.esEspejo()}).map({artefacto=>artefacto.valor(self)}).max()
+	}
+	
+	method poderHechizoPreferido(){
+		return hechizoPreferido.poder()
 	}
 	//method mejorArtefacto(){
 	//	if ( !self.mejorArt().esEspejo() ) return self.mejorArt()
